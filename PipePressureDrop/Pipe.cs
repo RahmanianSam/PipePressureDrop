@@ -16,6 +16,7 @@ namespace PipePressureDrop
         private double m_area;
         private double m_inletPressure;
         public double m_log_content;
+        private double m_num_seg;
         private PressureDropModel m_pressureDropModel;
         # endregion
 
@@ -88,6 +89,22 @@ namespace PipePressureDrop
             }
         }
 
+        public double Num_Seg
+        {
+            get { return m_num_seg; }
+            set
+            {
+                if (value <= 0)
+                {
+                    throw new Exception("Number of Segment for pipe should be positive.");
+                }
+                else
+                {
+                    m_num_seg = value;
+                }
+            }
+        }
+
         public PressureDropModel PressureDropModel
         {
             get { return m_pressureDropModel; }
@@ -106,13 +123,14 @@ namespace PipePressureDrop
         # endregion
 
         # region constructors
-        public Pipe(double length, double diameter, double inclination_angle, PressureDropModel pressureDropModel)
+        public Pipe(double length, double diameter, double inclination_angle, PressureDropModel pressureDropModel, double num_seg)
         {
             Length = length;
             Diameter = diameter;
             InclinationAngle = inclination_angle;
             PressureDropModel = pressureDropModel;
             m_area = (Math.PI * Math.Pow(m_diameter, 2) / 4.0);
+            Num_Seg = num_seg;
         }
 
         public Pipe(Pipe origPipe)
@@ -134,7 +152,8 @@ namespace PipePressureDrop
             double len_seg = Length / numSeg;
             double seg_pin = inletPress;
             double pout_seg = inletPress;
-            //m_log_content += "Calculation started ...!" + System.Environment.NewLine;
+            m_log_content += " seg#     X (m)      Pressure (kPa)" + System.Environment.NewLine;
+            m_log_content += "-----------------------------------------------" + System.Environment.NewLine;
 
             for (int i_seg = 0; i_seg < numSeg; i_seg++)
             {
@@ -143,8 +162,8 @@ namespace PipePressureDrop
                 double x = xlist.Last() + len_seg;
                 xlist.Add(x);
                 seg_pin = pout_seg;
-                m_log_content += $"pressure drop calculations in seg {i_seg + 1} converged:" + System.Environment.NewLine;
-                m_log_content += $"     X: {x} (m), P:  {pout_seg / 1000.0} (kPa)" + System.Environment.NewLine;
+                double decimalpout_kpa = pout_seg / 1000.0;
+                m_log_content +=$" {i_seg + 1}          {x}         { Math.Round((pout_seg / 1000.0),4)} " + System.Environment.NewLine;
 
 
             }

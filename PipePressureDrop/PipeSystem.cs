@@ -39,11 +39,10 @@ namespace PipePressureDrop
 
         }
         public double CalculatePipeSystem_POut(double inletPress, double qo, double qg, double qw, ref string m_log_content,
-            ref List<double> xlist, ref List<double> plist, double numSeg)
+            ref List<double> xlist, ref List<double> plist)
         {
             double m_pin_pipe = inletPress;
             double m_pout_pipe = inletPress;
-            //m_log_content += "Calculation  started ...!" + System.Environment.NewLine;
             int i = 0;
             foreach (Pipe p in PipeList)
             {
@@ -53,7 +52,7 @@ namespace PipePressureDrop
                 m_log_content += "-----------------------------------------------" + System.Environment.NewLine;
                 m_pin_pipe = m_pout_pipe;
                 m_pout_pipe = p.CalculateOutletPressure(m_pin_pipe, qo, qg, qw, ref m_log_content,
-                                              ref xlist, ref plist, numSeg);
+                                              ref xlist, ref plist, p.Num_Seg);
 
 
             }

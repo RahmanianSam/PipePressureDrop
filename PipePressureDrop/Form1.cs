@@ -19,10 +19,12 @@ namespace PipePressureDrop
             PipeDataGrid.Rows[0].Cells[0].Value = 2.0;
             PipeDataGrid.Rows[0].Cells[1].Value = 500.0;
             PipeDataGrid.Rows[0].Cells[2].Value = 30.0;
+            PipeDataGrid.Rows[0].Cells[3].Value = 1;
             for (int i = 0; i < PipeDataGrid.Columns.Count - 1; i++)
             {
                 PipeDataGrid.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
+
             PipeDataGrid.Columns[PipeDataGrid.Columns.Count - 1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
             for (int i = 0; i < PipeDataGrid.Columns.Count; i++)
@@ -76,12 +78,12 @@ namespace PipePressureDrop
                     }
                     
                     log_content = "-----------------------------------------------" + System.Environment.NewLine;
-                    Pipe pipe = new Pipe(length, diameter, angle, pdm);
+                    Pipe pipe = new Pipe(length, diameter, angle, pdm, numSeg);
                     pipeSys.Add(pipe);
 
                 }
 
-                pout = pipeSys.CalculatePipeSystem_POut(pin, qo, qg, qw, ref log_content, ref dist_list, ref pressure_list, numSeg);
+                pout = pipeSys.CalculatePipeSystem_POut(pin, qo, qg, qw, ref log_content, ref dist_list, ref pressure_list);
                 this.OutletP_textBox.Text = pout.ToString();
                 this.Log_TextBox.Text += log_content;
                 plot(dist_list, pressure_list);
@@ -153,12 +155,12 @@ namespace PipePressureDrop
             }
 
         }
-        private void dgvPipeProps_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        private void PipeDataGrid_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            e.Control.KeyPress += new KeyPressEventHandler(dgvPipeProps_KeyPress);
+            e.Control.KeyPress += new KeyPressEventHandler(PipeDataGrid_KeyPress);
         }
 
-        private void dgvPipeProps_KeyPress(object sender, KeyPressEventArgs e)
+        private void PipeDataGrid_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
             {
