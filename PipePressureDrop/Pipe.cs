@@ -146,7 +146,7 @@ namespace PipePressureDrop
 
         # region method
         public double CalculateOutletPressure(double inletPress, double qo, double qg, double qw, ref string m_log_content,
-                                              ref List<double> xlist, ref List<double> plist, double numSeg = 1)
+                                              ref Dictionary<string, List<double>> pipe_profiles, double numSeg = 1)
         {
 
             double len_seg = Length / numSeg;
@@ -154,17 +154,18 @@ namespace PipePressureDrop
             double pout_seg = inletPress;
             m_log_content += " seg#     X (m)      Pressure (kPa)" + System.Environment.NewLine;
             m_log_content += "-----------------------------------------------" + System.Environment.NewLine;
+            var dist_list = pipe_profiles["Distance"];
+            var pressure_list = pipe_profiles["Pressure"];
 
             for (int i_seg = 0; i_seg < numSeg; i_seg++)
             {
                 pout_seg = m_pressureDropModel.CalculatePressureLoss(seg_pin, m_area, Diameter, InclinationAngle, len_seg, qo, qg, qw);
-                plist.Add(pout_seg / 1000.0);
-                double x = xlist.Last() + len_seg;
-                xlist.Add(x);
+                pressure_list.Add(pout_seg / 1000.0);
+                double x = dist_list.Last() + len_seg;
+                dist_list.Add(x);
                 seg_pin = pout_seg;
                 double decimalpout_kpa = pout_seg / 1000.0;
-                m_log_content +=$" {i_seg + 1}          {x}         { Math.Round((pout_seg / 1000.0),4)} " + System.Environment.NewLine;
-
+                m_log_content +=$" {i_seg + 1}          {Math.Round(x, 2)}         { Math.Round((pout_seg / 1000.0),4)} " + System.Environment.NewLine;
 
             }
             m_log_content += "-----------------------------------------------" + System.Environment.NewLine;

@@ -47,12 +47,20 @@ namespace PipePressureDrop
                 double diameter = 0.050673;
                 double angle = 3.00;
                 int numSeg = 1;
-                List<double> pressure_list = new List<double>(numSeg + 1);
-                List<double> dist_list = new List<double>(numSeg + 1);
+
+                var pipe_profiles = new Dictionary<string, List<double>>();
+                pipe_profiles.Add("Distance", new List<double>());
+                pipe_profiles.Add("Pressure", new List<double>());
+                pipe_profiles.Add("Liquid Holdup", new List<double>());
+                pipe_profiles.Add("delp_hydro", new List<double>());
+                pipe_profiles.Add("delp_fric", new List<double>()); 
+
                 string log_content = "";
                 double pin = Double.Parse(this.InletP_textBox.Text);
                 double pout = 0.0;
-                dist_list.Add(0.0);
+                var dist_list = pipe_profiles["Distance"];
+                var pressure_list = pipe_profiles["Pressure"];
+                dist_list.Add(0);
                 pressure_list.Add(pin / 1000.0);
                 double qo = Double.Parse(this.qo_textBox.Text);
                 double qw = Double.Parse(this.qw_textBox.Text);
@@ -83,10 +91,10 @@ namespace PipePressureDrop
 
                 }
 
-                pout = pipeSys.CalculatePipeSystem_POut(pin, qo, qg, qw, ref log_content, ref dist_list, ref pressure_list);
+                pout = pipeSys.CalculatePipeSystem_POut(pin, qo, qg, qw, ref pipe_profiles, ref log_content);
                 this.OutletP_textBox.Text = pout.ToString();
                 this.Log_TextBox.Text += log_content;
-                plot(dist_list, pressure_list);
+                plot(pipe_profiles);
 
                 if (!bValidGeometry)
                 {
@@ -109,19 +117,25 @@ namespace PipePressureDrop
 
         }
 
-        private void plot(List<double> xList, List<double> pList)
-        {
 
+        private void plot(Dictionary<string, List<double>> profile_dict)
+//private void plot(Dictionary<...> profile_dict)
+        {
+            var x_list = profile_dict["Distance"];
+            var p_list = profile_dict["Pressure"];
+            var Liq_Hp = profile_dict["Liquid Holdup"];
+            var delp_hydro = profile_dict["delp_hydro"];
+            var delp_fric = profile_dict["delp_fric"];
             // remove previous series on the chart
             for (int iSeri = 0, nSeri = this.pressure_chart.Series.Count; iSeri < nSeri; iSeri++)
                 this.pressure_chart.Series.RemoveAt(0);
 
 
             // set up the min and max of the axes
-            double Xmin = xList.Min();
-            double Xmax = xList.Max();
-            double Ymin = pList.Min();
-            double Ymax = pList.Max();
+            double Xmin = x_list.Min();
+            double Xmax = x_list.Max();
+            double Ymin = p_list.Min();
+            double Ymax = p_list.Max();
 
             // add a new seri to the chart
             pressure_chart.Series.Add("Pressure Profile");
@@ -147,10 +161,10 @@ namespace PipePressureDrop
             pressure_chart.ChartAreas[0].AxisY.TitleFont = new Font("Sans Serif", 10, FontStyle.Bold);
 
             // adding the data on the chart
-            for (int iData = 0, nData = pList.Count(); iData < nData; iData++)
+            for (int iData = 0, nData = x_list.Count(); iData < nData; iData++)
             {
-                double x = xList[iData];
-                double y = pList[iData];
+                double x = x_list[iData];
+                double y = p_list[iData];
                 pressure_chart.Series[0].Points.AddXY(x, y);
             }
 
