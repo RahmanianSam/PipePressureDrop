@@ -100,7 +100,7 @@ namespace PipePressureDrop
 
         
         private void plot(Dictionary<string, List<double>> profile_dict)
-//private void plot(Dictionary<...> profile_dict)
+
         {
             var x_list = profile_dict["Distance"];
             var p_list = profile_dict["Pressure"];
