@@ -42,7 +42,6 @@ namespace PipePressureDrop
            {
                 PipeDataGrid.RowTemplate.Height = 30;
                 int nComp = PipeDataGrid.Rows.Count - 1;
- //               bool bValidGeometry = true;
                 double length = 152.4;
                 double diameter = 0.050673;
                 double angle = 3.00;
@@ -80,13 +79,6 @@ namespace PipePressureDrop
                     diameter = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
                     angle = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[2].Value.ToString());
                     numSeg = int.Parse(this.PipeDataGrid.Rows[iComp].Cells[3].Value.ToString());
-
-                    //if (length == null || diameter == null || angle == null)
-                    //{
-                    //    PipeDataGrid.Rows[iComp].DefaultCellStyle.BackColor = Color.Red;
-                    //    bValidGeometry = false;
-                    //}
-                    
                     log_content = "-----------------------------------------------" + System.Environment.NewLine;
                     Pipe pipe = new Pipe(length, diameter, angle, pdm, numSeg);
                     pipeSys.Add(pipe);
@@ -97,21 +89,8 @@ namespace PipePressureDrop
                 this.OutletP_textBox.Text = pout.ToString();
                 this.Log_TextBox.Text += log_content;
                 plot(pipe_profiles);
-
-                //if (!bValidGeometry)
-                //{
-                //    return;
-                //}
-                //else
-                //{
-                //    for (int iComp = 0; iComp < nComp; iComp++)
-                //    {
-                //        PipeDataGrid.Rows[iComp].DefaultCellStyle.BackColor = Color.White;
-                //    }
-                //}
-
-
             }
+
             catch (Exception except)
             {
                 this.Log_TextBox.Text += "Error: " + except.Message;
