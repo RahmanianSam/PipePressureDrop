@@ -43,8 +43,6 @@ namespace PipePressureDrop
         {
             double m_pin_pipe = inletPress;
             double m_pout_pipe = inletPress;
-            var dist_list = pipe_profiles["Distance"];
-            var pressure_list = pipe_profiles["Pressure"];
             int i = 0;
             foreach (Pipe p in PipeList)
             {
@@ -55,13 +53,6 @@ namespace PipePressureDrop
                 m_pin_pipe = m_pout_pipe;
                 m_pout_pipe = p.CalculateOutletPressure(m_pin_pipe, qo, qg, qw, ref m_log_content,
                                               ref pipe_profiles, p.Num_Seg);
-                //var pressure_profile_list = pipe_profiles["Pressure"];
-                //pressure_profile_list.AddRange(plist);
-
-                // OR
-
-                //pipe_profiles["Pressure"].AddRange(plist);
-                //pipe_profiles["Distance"].AddRange(xlist);
 
 
             }

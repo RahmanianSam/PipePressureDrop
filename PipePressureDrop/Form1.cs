@@ -52,14 +52,16 @@ namespace PipePressureDrop
                 pipe_profiles.Add("Distance", new List<double>());
                 pipe_profiles.Add("Pressure", new List<double>());
                 pipe_profiles.Add("Liquid Holdup", new List<double>());
-                pipe_profiles.Add("delp_hydro", new List<double>());
-                pipe_profiles.Add("delp_fric", new List<double>()); 
+                pipe_profiles.Add("Reynolds number", new List<double>());
+
 
                 string log_content = "";
                 double pin = Double.Parse(this.InletP_textBox.Text);
                 double pout = 0.0;
                 var dist_list = pipe_profiles["Distance"];
                 var pressure_list = pipe_profiles["Pressure"];
+                var re_List = pipe_profiles["Reynolds number"];
+                re_List.Add(0);
                 dist_list.Add(0);
                 pressure_list.Add(pin / 1000.0);
                 double qo = Double.Parse(this.qo_textBox.Text);
@@ -79,11 +81,11 @@ namespace PipePressureDrop
                     angle = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[2].Value.ToString());
                     numSeg = int.Parse(this.PipeDataGrid.Rows[iComp].Cells[3].Value.ToString());
 
-                    if (length == null || diameter == null || angle == null)
-                    {
-                        PipeDataGrid.Rows[iComp].DefaultCellStyle.BackColor = Color.Red;
-                        bValidGeometry = false;
-                    }
+                    //if (length == null || diameter == null || angle == null)
+                    //{
+                    //    PipeDataGrid.Rows[iComp].DefaultCellStyle.BackColor = Color.Red;
+                    //    bValidGeometry = false;
+                    //}
                     
                     log_content = "-----------------------------------------------" + System.Environment.NewLine;
                     Pipe pipe = new Pipe(length, diameter, angle, pdm, numSeg);
@@ -96,17 +98,17 @@ namespace PipePressureDrop
                 this.Log_TextBox.Text += log_content;
                 plot(pipe_profiles);
 
-                if (!bValidGeometry)
-                {
-                    return;
-                }
-                else
-                {
-                    for (int iComp = 0; iComp < nComp; iComp++)
-                    {
-                        PipeDataGrid.Rows[iComp].DefaultCellStyle.BackColor = Color.White;
-                    }
-                }
+                //if (!bValidGeometry)
+                //{
+                //    return;
+                //}
+                //else
+                //{
+                //    for (int iComp = 0; iComp < nComp; iComp++)
+                //    {
+                //        PipeDataGrid.Rows[iComp].DefaultCellStyle.BackColor = Color.White;
+                //    }
+                //}
 
 
             }
@@ -117,28 +119,29 @@ namespace PipePressureDrop
 
         }
 
-
+        
         private void plot(Dictionary<string, List<double>> profile_dict)
 //private void plot(Dictionary<...> profile_dict)
         {
             var x_list = profile_dict["Distance"];
             var p_list = profile_dict["Pressure"];
-            var Liq_Hp = profile_dict["Liquid Holdup"];
-            var delp_hydro = profile_dict["delp_hydro"];
-            var delp_fric = profile_dict["delp_fric"];
+            var re_list = profile_dict["Reynolds number"];
             // remove previous series on the chart
             for (int iSeri = 0, nSeri = this.pressure_chart.Series.Count; iSeri < nSeri; iSeri++)
                 this.pressure_chart.Series.RemoveAt(0);
-
+                this.reynolds_chart.Series.RemoveAt(0);
 
             // set up the min and max of the axes
             double Xmin = x_list.Min();
             double Xmax = x_list.Max();
             double Ymin = p_list.Min();
             double Ymax = p_list.Max();
+            double Zmin = re_list.Min();
+            double Zmax = re_list.Max();
 
             // add a new seri to the chart
             pressure_chart.Series.Add("Pressure Profile");
+
 
             // format the data display & axes titles & gridlines
             pressure_chart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -150,7 +153,7 @@ namespace PipePressureDrop
             pressure_chart.ChartAreas[0].AxisY.Maximum = Ymax;
             pressure_chart.ChartAreas[0].AxisY.Title = "Pressure (kPa)";
             pressure_chart.ChartAreas[0].AxisX.Title = "X (m)";
-            pressure_chart.Series["Pressure Profile"].BorderWidth = 3;
+            //pressure_chart.Series["Pressure Profile"].BorderWidth = 3;
             pressure_chart.Series[0].IsVisibleInLegend = false;
             pressure_chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.Gray;
             pressure_chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.Gray;
@@ -161,14 +164,52 @@ namespace PipePressureDrop
             pressure_chart.ChartAreas[0].AxisY.TitleFont = new Font("Sans Serif", 10, FontStyle.Bold);
 
             // adding the data on the chart
-            for (int iData = 0, nData = x_list.Count(); iData < nData; iData++)
+            for (int iData = 0, nData = p_list.Count(); iData < nData; iData++)
             {
                 double x = x_list[iData];
                 double y = p_list[iData];
                 pressure_chart.Series[0].Points.AddXY(x, y);
             }
 
+            reynolds_chart.Series.Add("Reynolds vs Distance");
+
+            double X_Rmin = x_list[1];
+            double X_Rmax = x_list.Max();
+            double Y_Rmin = re_list[1];
+            double Y_Rmax = re_list.Max();
+            // format the data display & axes titles & gridlines
+            reynolds_chart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            reynolds_chart.ChartAreas[0].AxisY.LabelStyle.Format = "#.##";
+            reynolds_chart.ChartAreas[0].AxisX.LabelStyle.Format = "#.#";
+            reynolds_chart.ChartAreas[0].AxisX.Minimum = X_Rmin;
+            reynolds_chart.ChartAreas[0].AxisX.Maximum = X_Rmax;
+            reynolds_chart.ChartAreas[0].AxisY.Minimum = Y_Rmin;
+            reynolds_chart.ChartAreas[0].AxisY.Maximum = Y_Rmax;
+            reynolds_chart.ChartAreas[0].AxisY.Title = "Reynolds";
+            reynolds_chart.ChartAreas[0].AxisX.Title = "X (m)";
+            //reynolds_chart.Series["Reynolds vs Distance"].BorderWidth = 3;
+            reynolds_chart.Series[0].IsVisibleInLegend = false;
+            reynolds_chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.Gray;
+            reynolds_chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.Gray;
+            reynolds_chart.ChartAreas[0].AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            reynolds_chart.ChartAreas[0].AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+
+            reynolds_chart.ChartAreas[0].AxisX.TitleFont = new Font("Sans Serif", 10, FontStyle.Bold);
+            reynolds_chart.ChartAreas[0].AxisY.TitleFont = new Font("Sans Serif", 10, FontStyle.Bold);
+
+            // adding the data on the chart
+            for (int iData = 1, nData = re_list.Count(); iData < nData; iData++)
+            {
+                double x = x_list[iData];
+                double y = re_list[iData];
+                reynolds_chart.Series[0].Points.AddXY(x, y);
+            }
+
         }
+
+
+
+
         private void PipeDataGrid_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
             e.Control.KeyPress += new KeyPressEventHandler(PipeDataGrid_KeyPress);

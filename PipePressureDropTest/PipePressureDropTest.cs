@@ -45,8 +45,9 @@ namespace PipePressureDropTest
             double qo = 0.0000001;
             double qw = 0.01;
             double qg = 0.00000001;
+            double reynolds = 0.0;
 
-            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw);
+            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw, ref reynolds);
             Assert.AreEqual(pout, pin, 0.0001 * pin);
         }
 
@@ -63,8 +64,8 @@ namespace PipePressureDropTest
             double qo = 0.0000001;
             double qw = 0.01;
             double qg = 0.00000001;
-
-            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw);
+            double reynolds = 0.0;
+            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw, ref reynolds);
 
             double dp_hyd_est = 1000.0 * 9.81 * 1.0;
             double pout_est = pin - dp_hyd_est;
@@ -90,15 +91,23 @@ namespace PipePressureDropTest
             double mug = 0.000015;
             double muw = 0.001;
             int numSeg = 1;
-            List<double> dist_list = new List<double>(numSeg + 1);
-            List<double> pressure_list = new List<double>(numSeg + 1);
-            pressure_list.Add(pin / 1000.0);
-            dist_list.Add(0.0);
+
             string log_content = "-------------------------------" + System.Environment.NewLine;
             FluidProperties prob = new FluidProperties(muo, muw, mug);
             PressureDropModel pd = new PressureDropModel(prob);
-            Pipe pipe_1 = new Pipe(length, diameter, angle, pd);
-            double pout = pipe_1.CalculateOutletPressure(pin, qo, qg, qw, ref log_content, ref dist_list, ref pressure_list, numSeg);
+            var pipe_profiles = new Dictionary<string, List<double>>();
+            pipe_profiles.Add("Distance", new List<double>());
+            pipe_profiles.Add("Pressure", new List<double>());
+            pipe_profiles.Add("Liquid Holdup", new List<double>());
+            pipe_profiles.Add("Reynolds number", new List<double>());
+            var dist_list = pipe_profiles["Distance"];
+            var pressure_list = pipe_profiles["Pressure"];
+            var re_List = pipe_profiles["Reynolds number"];
+            pressure_list.Add(pin);
+            dist_list.Add(0);
+            re_List.Add(0);
+            Pipe pipe_1 = new Pipe(length, diameter, angle, pd, numSeg);
+            double pout = pipe_1.CalculateOutletPressure(pin, qo, qg, qw, ref log_content, ref pipe_profiles, numSeg);
 
             Assert.AreEqual(pout, 6935726.61909728, 0.001 * pout);
         }
@@ -118,15 +127,22 @@ namespace PipePressureDropTest
             double mug = 0.000015;
             double muw = 0.001;
             int numSeg = 10;
-            List<double> dist_list = new List<double>(numSeg + 1);
-            List<double> pressure_list = new List<double>(numSeg + 1);
-            pressure_list.Add(pin / 1000.0);
-            dist_list.Add(0.0);
             string log_content = "-------------------------------" + System.Environment.NewLine;
             FluidProperties prob = new FluidProperties(muo, muw, mug);
             PressureDropModel pd = new PressureDropModel(prob);
-            Pipe pipe_1 = new Pipe(length, diameter, angle, pd);
-            double pout = pipe_1.CalculateOutletPressure(pin, qo, qg, qw, ref log_content, ref dist_list, ref pressure_list, numSeg);
+            Pipe pipe_1 = new Pipe(length, diameter, angle, pd, numSeg);
+            var pipe_profiles = new Dictionary<string, List<double>>();
+            pipe_profiles.Add("Distance", new List<double>());
+            pipe_profiles.Add("Pressure", new List<double>());
+            pipe_profiles.Add("Liquid Holdup", new List<double>());
+            pipe_profiles.Add("Reynolds number", new List<double>());
+            var dist_list = pipe_profiles["Distance"];
+            var pressure_list = pipe_profiles["Pressure"];
+            var re_List = pipe_profiles["Reynolds number"];
+            pressure_list.Add(pin);
+            dist_list.Add(0);
+            re_List.Add(0);
+            double pout = pipe_1.CalculateOutletPressure(pin, qo, qg, qw, ref log_content, ref pipe_profiles, numSeg);
 
 
 

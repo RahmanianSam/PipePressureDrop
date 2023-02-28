@@ -29,12 +29,15 @@ namespace PipePressureDrop
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.CalculatePOut_btn = new System.Windows.Forms.Button();
             this.PipeDataGrid = new System.Windows.Forms.DataGridView();
             this.ColumnDimeter = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,20 +75,24 @@ namespace PipePressureDrop
             this.labelOutletPa = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.pressure_tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pressure_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.reynolds_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.PipeDataGrid)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.pressure_tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pressure_chart)).BeginInit();
-            this.groupBox5.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.reynolds_chart)).BeginInit();
             this.SuspendLayout();
             // 
             // CalculatePOut_btn
@@ -99,38 +106,38 @@ namespace PipePressureDrop
             // 
             // PipeDataGrid
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PipeDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PipeDataGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.PipeDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PipeDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnDimeter,
             this.ColumnLength,
             this.ColumnAngle,
             this.NumSegColumn});
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.PipeDataGrid.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.PipeDataGrid.DefaultCellStyle = dataGridViewCellStyle2;
             this.PipeDataGrid.Location = new System.Drawing.Point(28, 37);
             this.PipeDataGrid.Name = "PipeDataGrid";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PipeDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PipeDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.PipeDataGrid.RowHeadersWidth = 102;
             this.PipeDataGrid.RowTemplate.Height = 20;
             this.PipeDataGrid.Size = new System.Drawing.Size(786, 308);
@@ -475,9 +482,20 @@ namespace PipePressureDrop
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.pressure_tabControl);
+            this.groupBox5.Location = new System.Drawing.Point(901, 39);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(1434, 880);
+            this.groupBox5.TabIndex = 10;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "PipeProperty Profile";
+            // 
             // pressure_tabControl
             // 
             this.pressure_tabControl.Controls.Add(this.tabPage1);
+            this.pressure_tabControl.Controls.Add(this.tabPage2);
             this.pressure_tabControl.Location = new System.Drawing.Point(30, 37);
             this.pressure_tabControl.Name = "pressure_tabControl";
             this.pressure_tabControl.SelectedIndex = 0;
@@ -497,29 +515,48 @@ namespace PipePressureDrop
             // 
             // pressure_chart
             // 
-            chartArea3.Name = "ChartArea1";
-            this.pressure_chart.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.pressure_chart.Legends.Add(legend3);
+            chartArea1.Name = "ChartArea1";
+            this.pressure_chart.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.pressure_chart.Legends.Add(legend1);
             this.pressure_chart.Location = new System.Drawing.Point(25, 25);
             this.pressure_chart.Name = "pressure_chart";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.pressure_chart.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.pressure_chart.Series.Add(series1);
             this.pressure_chart.Size = new System.Drawing.Size(1283, 694);
             this.pressure_chart.TabIndex = 10;
             this.pressure_chart.Text = "chart1";
             // 
-            // groupBox5
+            // tabPage2
             // 
-            this.groupBox5.Controls.Add(this.pressure_tabControl);
-            this.groupBox5.Location = new System.Drawing.Point(901, 39);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1434, 880);
-            this.groupBox5.TabIndex = 10;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "PipeProperty Profile";
+            this.tabPage2.Controls.Add(this.reynolds_chart);
+            this.tabPage2.Location = new System.Drawing.Point(10, 48);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1346, 758);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Reynolds";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // reynolds_chart
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.reynolds_chart.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.reynolds_chart.Legends.Add(legend2);
+            this.reynolds_chart.Location = new System.Drawing.Point(27, 21);
+            this.reynolds_chart.Name = "reynolds_chart";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.reynolds_chart.Series.Add(series2);
+            this.reynolds_chart.Size = new System.Drawing.Size(1313, 720);
+            this.reynolds_chart.TabIndex = 0;
+            this.reynolds_chart.Text = "chart1";
             // 
             // Form1
             // 
@@ -550,10 +587,12 @@ namespace PipePressureDrop
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
             this.pressure_tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pressure_chart)).EndInit();
-            this.groupBox5.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.reynolds_chart)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -597,10 +636,12 @@ namespace PipePressureDrop
         private System.Windows.Forms.Label labelOutletPa;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TabControl pressure_tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.DataVisualization.Charting.Chart pressure_chart;
-        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart reynolds_chart;
     }
 }
 
