@@ -42,7 +42,7 @@ namespace PipePressureDrop
            {
                 PipeDataGrid.RowTemplate.Height = 30;
                 int nComp = PipeDataGrid.Rows.Count - 1;
-                bool bValidGeometry = true;
+ //               bool bValidGeometry = true;
                 double length = 152.4;
                 double diameter = 0.050673;
                 double angle = 3.00;
