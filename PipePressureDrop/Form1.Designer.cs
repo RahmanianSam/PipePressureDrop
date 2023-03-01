@@ -538,7 +538,7 @@ namespace PipePressureDrop
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1346, 758);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Reynolds";
+            this.tabPage2.Text = "HoldUp";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // reynolds_chart

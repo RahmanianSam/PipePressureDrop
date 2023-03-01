@@ -144,7 +144,7 @@ namespace PipePressureDrop
         }
 
         #endregion
-
+        //added
         # region method
         public double CalculateOutletPressure(double inletPress, double qo, double qg, double qw, ref string m_log_content,
                                               ref Dictionary<string, List<double>> pipe_profiles, double numSeg = 1)

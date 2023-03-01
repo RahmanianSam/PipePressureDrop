@@ -35,6 +35,7 @@ namespace PipePressureDrop
         #region methods
         public double CalculatePressureLoss(double inletPress, double area, double diameter, double angle, double length, double inletOilFlowRate, double inletGasFlowRate, double inletWaterFlowRate, ref double holdup)
         {
+            //added
             // Units are converted to be compatible with the corrolations.
             double length_ft = length * (1.0 / ConversionFactor.FT_TO_M);
             double area_ft2 = area * (1.0 / Math.Pow(ConversionFactor.FT_TO_M, 2));
