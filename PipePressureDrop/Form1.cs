@@ -59,8 +59,8 @@ namespace PipePressureDrop
                 double pout = 0.0;
                 var dist_list = pipe_profiles["Distance"];
                 var pressure_list = pipe_profiles["Pressure"];
-                var re_List = pipe_profiles["Reynolds number"];
-                re_List.Add(0);
+                var holdup_List = pipe_profiles["Liquid Holdup"];
+                holdup_List.Add(0);
                 dist_list.Add(0);
                 pressure_list.Add(pin / 1000.0);
                 double qo = Double.Parse(this.qo_textBox.Text);
@@ -104,7 +104,7 @@ namespace PipePressureDrop
         {
             var x_list = profile_dict["Distance"];
             var p_list = profile_dict["Pressure"];
-            var re_list = profile_dict["Reynolds number"];
+            var holdup_list = profile_dict["Liquid Holdup"];
             // remove previous series on the chart
             for (int iSeri = 0, nSeri = this.pressure_chart.Series.Count; iSeri < nSeri; iSeri++)
                 this.pressure_chart.Series.RemoveAt(0);
@@ -115,8 +115,7 @@ namespace PipePressureDrop
             double Xmax = x_list.Max();
             double Ymin = p_list.Min();
             double Ymax = p_list.Max();
-            double Zmin = re_list.Min();
-            double Zmax = re_list.Max();
+
 
             // add a new seri to the chart
             pressure_chart.Series.Add("Pressure Profile");
@@ -132,7 +131,6 @@ namespace PipePressureDrop
             pressure_chart.ChartAreas[0].AxisY.Maximum = Ymax;
             pressure_chart.ChartAreas[0].AxisY.Title = "Pressure (kPa)";
             pressure_chart.ChartAreas[0].AxisX.Title = "X (m)";
-            //pressure_chart.Series["Pressure Profile"].BorderWidth = 3;
             pressure_chart.Series[0].IsVisibleInLegend = false;
             pressure_chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.Gray;
             pressure_chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.Gray;
@@ -150,23 +148,22 @@ namespace PipePressureDrop
                 pressure_chart.Series[0].Points.AddXY(x, y);
             }
 
-            reynolds_chart.Series.Add("Reynolds vs Distance");
+            reynolds_chart.Series.Add("holdup vs Distance");
 
-            double X_Rmin = x_list[1];
+            double X_Rmin = x_list.Min();
             double X_Rmax = x_list.Max();
-            double Y_Rmin = re_list[1];
-            double Y_Rmax = re_list.Max();
+            double Y_Rmin = holdup_list.Min();
+            double Y_Rmax = holdup_list.Max();
             // format the data display & axes titles & gridlines
-            reynolds_chart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            reynolds_chart.ChartAreas[0].AxisY.LabelStyle.Format = "#.##";
+            reynolds_chart.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            reynolds_chart.ChartAreas[0].AxisY.LabelStyle.Format = "0.##";
             reynolds_chart.ChartAreas[0].AxisX.LabelStyle.Format = "#.#";
             reynolds_chart.ChartAreas[0].AxisX.Minimum = X_Rmin;
             reynolds_chart.ChartAreas[0].AxisX.Maximum = X_Rmax;
             reynolds_chart.ChartAreas[0].AxisY.Minimum = Y_Rmin;
             reynolds_chart.ChartAreas[0].AxisY.Maximum = Y_Rmax;
-            reynolds_chart.ChartAreas[0].AxisY.Title = "Reynolds";
+            reynolds_chart.ChartAreas[0].AxisY.Title = "Hold Up";
             reynolds_chart.ChartAreas[0].AxisX.Title = "X (m)";
-            //reynolds_chart.Series["Reynolds vs Distance"].BorderWidth = 3;
             reynolds_chart.Series[0].IsVisibleInLegend = false;
             reynolds_chart.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.Gray;
             reynolds_chart.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.Gray;
@@ -177,10 +174,10 @@ namespace PipePressureDrop
             reynolds_chart.ChartAreas[0].AxisY.TitleFont = new Font("Sans Serif", 10, FontStyle.Bold);
 
             // adding the data on the chart
-            for (int iData = 1, nData = re_list.Count(); iData < nData; iData++)
+            for (int iData = 0, nData = holdup_list.Count(); iData < nData; iData++)
             {
                 double x = x_list[iData];
-                double y = re_list[iData];
+                double y = holdup_list[iData];
                 reynolds_chart.Series[0].Points.AddXY(x, y);
             }
 

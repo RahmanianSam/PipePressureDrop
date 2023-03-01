@@ -33,7 +33,7 @@ namespace PipePressureDrop
 
 
         #region methods
-        public double CalculatePressureLoss(double inletPress, double area, double diameter, double angle, double length, double inletOilFlowRate, double inletGasFlowRate, double inletWaterFlowRate, ref double reynolds)
+        public double CalculatePressureLoss(double inletPress, double area, double diameter, double angle, double length, double inletOilFlowRate, double inletGasFlowRate, double inletWaterFlowRate, ref double holdup)
         {
             // Units are converted to be compatible with the corrolations.
             double length_ft = length * (1.0 / ConversionFactor.FT_TO_M);
@@ -45,7 +45,7 @@ namespace PipePressureDrop
             double pin_psi = inletPress * ConversionFactor.Pa_TO_Psi;
             double fo = qo_ft3_per_s / (qw_ft3_per_s + qo_ft3_per_s);
             double pout_psi = pin_psi;
-            double re_num = 0;
+            double lambda = 0;
             double pout_err = 1.0;
 
             while (pout_err > 0.05)
@@ -68,13 +68,13 @@ namespace PipePressureDrop
                 double bg = m_fluidProperties.CalculateBg(p_ave_psi);
                 double vsg = qo_ft3_per_s * (gor - rs / ConversionFactor.BBL_TO_Scf) * bg / area_ft2;                    // Rs is dimentionless here
                 double vm = vsl + vsg;
-                double lambda = vsl / vm;
+                lambda = vsl / vm;
                 double rho_ns = rho_l * lambda + rho_g * (1.0 - lambda);
                 double miu_ns = miu_l * lambda + miu_g * (1.0 - lambda);
 
                 double miu_ns_convert = miu_ns * ConversionFactor.CP_TO_LB_FTSec;
 
-                re_num = rho_ns * vm * diameter_ft / miu_ns_convert;
+                double re_num = rho_ns * vm * diameter_ft / miu_ns_convert;
 
                 double fric = 0.0056 + 0.5 * Math.Pow(re_num, -0.32);
                 double angle_rad = angle * 2 * Math.PI / 360.0;
@@ -86,7 +86,7 @@ namespace PipePressureDrop
                 pout_psi = pout_psi_new;
             }
 
-            reynolds = re_num;
+            holdup = lambda;
             double dp_out_pa = pout_psi * ConversionFactor.PSI_TO_PA;
             double pout = dp_out_pa;
 

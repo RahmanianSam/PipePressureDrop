@@ -156,16 +156,16 @@ namespace PipePressureDrop
             m_log_content += "-----------------------------------------------" + System.Environment.NewLine;
             var dist_list = pipe_profiles["Distance"];
             var pressure_list = pipe_profiles["Pressure"];
-            var reynlods_list = pipe_profiles["Reynolds number"];
-            double re = 0;
+            var holdup_List = pipe_profiles["Liquid Holdup"];
+            double hp = 0;
 
             for (int i_seg = 0; i_seg < numSeg; i_seg++)
             {
-                pout_seg = m_pressureDropModel.CalculatePressureLoss(seg_pin, m_area, Diameter, InclinationAngle, len_seg, qo, qg, qw, ref re);
+                pout_seg = m_pressureDropModel.CalculatePressureLoss(seg_pin, m_area, Diameter, InclinationAngle, len_seg, qo, qg, qw, ref hp);
                 pressure_list.Add(pout_seg / 1000.0);
                 double x = dist_list.Last() + len_seg;
                 dist_list.Add(x);
-                reynlods_list.Add(re);
+                holdup_List.Add(hp);
                 seg_pin = pout_seg;
                 m_log_content +=$" {i_seg + 1}          {Math.Round(x, 2)}         { Math.Round((pout_seg / 1000.0),4)} " + System.Environment.NewLine;
 
