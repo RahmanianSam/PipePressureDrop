@@ -48,9 +48,10 @@ namespace PipePressureDrop
             double pout_psi = pin_psi;
             double lambda = 0;
             double pout_err = 1.0;
-
-            while (pout_err > 0.05)
+            int counter = 0;
+            while (pout_err > 0.05 && counter < 50)
             {
+                counter++; // break the loop if not converged after 50 attempts
                 double p_ave_psi = (pin_psi + pout_psi) / 2.0;
                 double rho_o = m_fluidProperties.CalculateOilDensity(p_ave_psi);
                 double rho_w = m_fluidProperties.CalculateWaterDensity(p_ave_psi);
