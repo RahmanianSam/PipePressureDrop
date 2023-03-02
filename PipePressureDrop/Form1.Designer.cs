@@ -81,6 +81,9 @@ namespace PipePressureDrop
             this.pressure_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.reynolds_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.SI_radioButton = new System.Windows.Forms.RadioButton();
+            this.Field_radioButton = new System.Windows.Forms.RadioButton();
+            this.Units = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.PipeDataGrid)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -93,6 +96,7 @@ namespace PipePressureDrop
             ((System.ComponentModel.ISupportInitialize)(this.pressure_chart)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.reynolds_chart)).BeginInit();
+            this.Units.SuspendLayout();
             this.SuspendLayout();
             // 
             // CalculatePOut_btn
@@ -558,12 +562,47 @@ namespace PipePressureDrop
             this.reynolds_chart.TabIndex = 0;
             this.reynolds_chart.Text = "chart1";
             // 
+            // SI_radioButton
+            // 
+            this.SI_radioButton.AutoSize = true;
+            this.SI_radioButton.Checked = true;
+            this.SI_radioButton.Location = new System.Drawing.Point(17, 37);
+            this.SI_radioButton.Name = "SI_radioButton";
+            this.SI_radioButton.Size = new System.Drawing.Size(136, 36);
+            this.SI_radioButton.TabIndex = 13;
+            this.SI_radioButton.TabStop = true;
+            this.SI_radioButton.Text = "SI Unit";
+            this.SI_radioButton.UseVisualStyleBackColor = true;
+            this.SI_radioButton.CheckedChanged += new System.EventHandler(this.unit_radioButton_CheckedChanged);
+            // 
+            // Field_radioButton
+            // 
+            this.Field_radioButton.AutoSize = true;
+            this.Field_radioButton.Location = new System.Drawing.Point(17, 79);
+            this.Field_radioButton.Name = "Field_radioButton";
+            this.Field_radioButton.Size = new System.Drawing.Size(173, 36);
+            this.Field_radioButton.TabIndex = 14;
+            this.Field_radioButton.Text = "Field Unit";
+            this.Field_radioButton.UseVisualStyleBackColor = true;
+            // 
+            // Units
+            // 
+            this.Units.Controls.Add(this.SI_radioButton);
+            this.Units.Controls.Add(this.Field_radioButton);
+            this.Units.Location = new System.Drawing.Point(633, 1220);
+            this.Units.Name = "Units";
+            this.Units.Size = new System.Drawing.Size(257, 131);
+            this.Units.TabIndex = 15;
+            this.Units.TabStop = false;
+            this.Units.Text = "Units";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(2368, 1362);
+            this.Controls.Add(this.Units);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox4);
@@ -572,11 +611,12 @@ namespace PipePressureDrop
             this.Controls.Add(this.CalculatePOut_btn);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximumSize = new System.Drawing.Size(2400, 1450);
             this.Name = "Form1";
+            this.ShowInTaskbar = false;
             this.Text = "CMG Practicum";
             this.TopMost = true;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.PipeDataGrid)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -593,6 +633,8 @@ namespace PipePressureDrop
             ((System.ComponentModel.ISupportInitialize)(this.pressure_chart)).EndInit();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.reynolds_chart)).EndInit();
+            this.Units.ResumeLayout(false);
+            this.Units.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -642,6 +684,9 @@ namespace PipePressureDrop
         private System.Windows.Forms.DataVisualization.Charting.Chart pressure_chart;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataVisualization.Charting.Chart reynolds_chart;
+        private System.Windows.Forms.RadioButton SI_radioButton;
+        private System.Windows.Forms.RadioButton Field_radioButton;
+        private System.Windows.Forms.GroupBox Units;
     }
 }
 

@@ -12,9 +12,12 @@ namespace PipePressureDrop
 {
     public partial class Form1 : Form
     {
+        bool m_isFiledUnit = false;
         public Form1()
         {
             InitializeComponent();
+            this.SI_radioButton.Checked = true;
+            
             PipeDataGrid.Rows.Add();
             PipeDataGrid.Rows[0].Cells[0].Value = 2.0;
             PipeDataGrid.Rows[0].Cells[1].Value = 500.0;
@@ -47,6 +50,8 @@ namespace PipePressureDrop
                 double angle = 3.00;
                 int numSeg = 1;
 
+
+
                 var pipe_profiles = new Dictionary<string, List<double>>();
                 pipe_profiles.Add("Distance", new List<double>());
                 pipe_profiles.Add("Pressure", new List<double>());
@@ -55,27 +60,45 @@ namespace PipePressureDrop
 
 
                 string log_content = "";
-                double pin = Double.Parse(this.InletP_textBox.Text);
+
                 double pout = 0.0;
                 var dist_list = pipe_profiles["Distance"];
                 var pressure_list = pipe_profiles["Pressure"];
                 var holdup_List = pipe_profiles["Liquid Holdup"];
                 holdup_List.Add(0);
                 dist_list.Add(0);
+
+
+                double qo_input = Double.Parse(this.qo_textBox.Text);
+                double qo = m_isFiledUnit ? qo_input * ConversionFactor.BBL_TO_M3 : qo_input;
+
+                double qw_input = Double.Parse(this.qw_textBox.Text);
+                double qw = m_isFiledUnit ? qw_input * ConversionFactor.BBL_TO_M3 : qw_input;
+
+                double qg_input = Double.Parse(this.qg_textBox.Text);
+                double qg = m_isFiledUnit ? qg_input * ConversionFactor.BBL_TO_M3 : qg_input;
+
+                double miu_o_input = Double.Parse(this.OilVisc_textBox.Text);
+                double miu_o = m_isFiledUnit ? miu_o_input * ConversionFactor.CP_TO_KG_MSec : miu_o_input;
+
+                double miu_g_input = Double.Parse(this.GasVisc_textBox.Text);
+                double miu_g = m_isFiledUnit ? miu_g_input * ConversionFactor.CP_TO_KG_MSec : miu_g_input;
+
+                double miu_w_input = Double.Parse(this.WaterVisc_textBox.Text);
+                double miu_w = m_isFiledUnit ? miu_w_input * ConversionFactor.CP_TO_KG_MSec : miu_w_input;
+
+                double pin_input = Double.Parse(this.InletP_textBox.Text);
+                double pin = m_isFiledUnit ? pin_input * ConversionFactor.PSI_TO_PA : pin_input;
                 pressure_list.Add(pin / 1000.0);
-                double qo = Double.Parse(this.qo_textBox.Text);
-                double qw = Double.Parse(this.qw_textBox.Text);
-                double qg = Double.Parse(this.qg_textBox.Text);
-                double miu_o = Double.Parse(this.OilVisc_textBox.Text);
-                double miu_g = Double.Parse(this.GasVisc_textBox.Text);
-                double miu_w = Double.Parse(this.WaterVisc_textBox.Text);
                 PipeSystem pipeSys = new PipeSystem();
                 FluidProperties prop = new FluidProperties(miu_o, miu_w, miu_g);
                 PressureDropModel pdm = new PressureDropModel(prop);
 
                 for (int iComp = 0; iComp < nComp; iComp++)
                 {
-                    length = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[1].Value.ToString());
+                    double length_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[1].Value.ToString());
+                    length = m_isFiledUnit ? length_input * ConversionFactor.FT_TO_M : length_input;
+
                     diameter = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
                     angle = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[2].Value.ToString());
                     numSeg = int.Parse(this.PipeDataGrid.Rows[iComp].Cells[3].Value.ToString());
@@ -199,6 +222,85 @@ namespace PipePressureDrop
             }
         }
 
-    
+        private void unit_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.Field_radioButton.Checked)
+            {
+                m_isFiledUnit = true;
+
+                this.labelqom3day.Text = "bbl/day";
+                double qo_field = Double.Parse(this.qo_textBox.Text) / ConversionFactor.BBL_TO_M3;
+                this.qo_textBox.Text = qo_field.ToString();
+
+                this.labelqwm3day.Text = "bbl/day";
+                double qw_field = Double.Parse(this.qw_textBox.Text) / ConversionFactor.BBL_TO_M3;
+                this.qw_textBox.Text = qw_field.ToString();
+
+                this.labelqgm3day.Text = "bbl/day";
+                double qg_field = Double.Parse(this.qg_textBox.Text) / ConversionFactor.BBL_TO_M3;
+                this.qg_textBox.Text = qg_field.ToString();
+
+                this.labelOilkgms.Text = "cp";
+                double miuo_field = Double.Parse(this.OilVisc_textBox.Text) / ConversionFactor.CP_TO_KG_MSec;
+                this.OilVisc_textBox.Text = miuo_field.ToString();
+
+                this.labelWaterkgms.Text = "cp";
+                double miuw_field = Double.Parse(this.WaterVisc_textBox.Text) / ConversionFactor.CP_TO_KG_MSec;
+                this.WaterVisc_textBox.Text = miuo_field.ToString();
+
+                this.labelGaskgms.Text = "cp";
+                double miug_field = Double.Parse(this.GasVisc_textBox.Text) / ConversionFactor.CP_TO_KG_MSec;
+                this.GasVisc_textBox.Text = miug_field.ToString();
+
+                this.labelInletPa.Text = "Psi";
+                double pin_field = Double.Parse(this.InletP_textBox.Text) / ConversionFactor.PSI_TO_PA;
+                this.InletP_textBox.Text = pin_field.ToString();
+
+                int nComp = PipeDataGrid.Rows.Count - 1;
+                this.ColumnDimeter.HeaderText = "D (ft)";
+                for (int iComp = 0; iComp < nComp; iComp++)
+                {
+                    double length_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[1].Value.ToString());
+                    double length = m_isFiledUnit ? length_input * ConversionFactor.FT_TO_M : length_input;
+                    this.PipeDataGrid.Rows[iComp].Cells[1].Value = length.ToString();
+
+                    double diameter = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
+                    this.PipeDataGrid.Rows[iComp].Cells[0].Value = diameter.ToString();
+                }
+            }
+            else
+            {
+                m_isFiledUnit = false;
+
+                this.labelqom3day.Text = "m3 / day";
+                double qo_si = Double.Parse(this.qo_textBox.Text) *  ConversionFactor.BBL_TO_M3;
+                this.qo_textBox.Text = qo_si.ToString();
+
+                this.labelqwm3day.Text = "m3 / day";
+                double qw_si = Double.Parse(this.qw_textBox.Text) *  ConversionFactor.BBL_TO_M3;
+                this.qw_textBox.Text = qw_si.ToString();
+
+                this.labelqgm3day.Text = "m3 / day";
+                double qg_si = Double.Parse(this.qg_textBox.Text) *  ConversionFactor.BBL_TO_M3;
+                this.qg_textBox.Text = qg_si.ToString();
+
+                this.labelOilkgms.Text = "kgm/sec";
+                double miuo_si = Double.Parse(this.OilVisc_textBox.Text) * ConversionFactor.CP_TO_KG_MSec;
+                this.OilVisc_textBox.Text = miuo_si.ToString();
+
+                this.labelWaterkgms.Text = "kgm/sec";
+                double miuw_si = Double.Parse(this.WaterVisc_textBox.Text) * ConversionFactor.CP_TO_KG_MSec;
+                this.WaterVisc_textBox.Text = miuw_si.ToString();
+
+                this.labelGaskgms.Text = "kgm/sec";
+                double miug_si = Double.Parse(this.GasVisc_textBox.Text) * ConversionFactor.CP_TO_KG_MSec;
+                this.GasVisc_textBox.Text = miug_si.ToString();
+
+                this.labelInletPa.Text = "Pa";
+                double pin_field = Double.Parse(this.InletP_textBox.Text) * ConversionFactor.PSI_TO_PA;
+                this.InletP_textBox.Text = pin_field.ToString();
+            }
+
+        }
     }
 }
