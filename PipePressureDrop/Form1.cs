@@ -99,7 +99,9 @@ namespace PipePressureDrop
                     double length_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[1].Value.ToString());
                     length = m_isFiledUnit ? length_input * ConversionFactor.FT_TO_M : length_input;
 
-                    diameter = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
+                    double diameter_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
+                    diameter = m_isFiledUnit ? diameter_input * ConversionFactor.FT_TO_M : diameter_input;
+
                     angle = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[2].Value.ToString());
                     numSeg = int.Parse(this.PipeDataGrid.Rows[iComp].Cells[3].Value.ToString());
                     log_content = "-----------------------------------------------" + System.Environment.NewLine;
@@ -256,15 +258,22 @@ namespace PipePressureDrop
                 double pin_field = Double.Parse(this.InletP_textBox.Text) / ConversionFactor.PSI_TO_PA;
                 this.InletP_textBox.Text = pin_field.ToString();
 
+                this.labelOutletPa.Text = "Psi";
+                this.OutletP_textBox.Text = pout.ToString();
+                double pin_field = Double.Parse(this.InletP_textBox.Text) / ConversionFactor.PSI_TO_PA;
+                this.InletP_textBox.Text = pin_field.ToString();
+
                 int nComp = PipeDataGrid.Rows.Count - 1;
                 this.ColumnDimeter.HeaderText = "D (ft)";
+                this.ColumnLength.HeaderText = "L (ft)";
                 for (int iComp = 0; iComp < nComp; iComp++)
                 {
                     double length_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[1].Value.ToString());
-                    double length = m_isFiledUnit ? length_input * ConversionFactor.FT_TO_M : length_input;
+                    double length = length_input / ConversionFactor.FT_TO_M;
                     this.PipeDataGrid.Rows[iComp].Cells[1].Value = length.ToString();
 
-                    double diameter = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
+                    double diameter_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
+                    double diameter =diameter_input / ConversionFactor.FT_TO_M;
                     this.PipeDataGrid.Rows[iComp].Cells[0].Value = diameter.ToString();
                 }
             }
@@ -299,6 +308,22 @@ namespace PipePressureDrop
                 this.labelInletPa.Text = "Pa";
                 double pin_field = Double.Parse(this.InletP_textBox.Text) * ConversionFactor.PSI_TO_PA;
                 this.InletP_textBox.Text = pin_field.ToString();
+
+                this.labelOutletPa.Text = "Psi";
+
+                this.ColumnDimeter.HeaderText = "D (m)";
+                this.ColumnLength.HeaderText = "L (m)";
+                int nComp = PipeDataGrid.Rows.Count - 1;
+                for (int iComp = 0; iComp < nComp; iComp++)
+                {
+                    double length_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[1].Value.ToString());
+                    double length = length_input * ConversionFactor.FT_TO_M;
+                    this.PipeDataGrid.Rows[iComp].Cells[1].Value = length.ToString();
+
+                    double diameter_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
+                    double diameter =diameter_input * ConversionFactor.FT_TO_M;
+                    this.PipeDataGrid.Rows[iComp].Cells[0].Value = diameter.ToString();
+                }
             }
 
         }
