@@ -13,6 +13,7 @@ namespace PipePressureDrop
     public partial class Form1 : Form
     {
         bool m_isFiledUnit = false;
+        double pout ;
         public Form1()
         {
             InitializeComponent();
@@ -61,7 +62,7 @@ namespace PipePressureDrop
 
                 string log_content = "";
 
-                double pout = 0.0;
+                //double pout = 0.0;
                 var dist_list = pipe_profiles["Distance"];
                 var pressure_list = pipe_profiles["Pressure"];
                 var holdup_List = pipe_profiles["Liquid Holdup"];
@@ -111,7 +112,8 @@ namespace PipePressureDrop
                 }
 
                 pout = pipeSys.CalculatePipeSystem_POut(pin, qo, qg, qw, ref pipe_profiles, ref log_content);
-                this.OutletP_textBox.Text = pout.ToString();
+                double OutletP = m_isFiledUnit ? pout / ConversionFactor.PSI_TO_PA : pout;
+                this.OutletP_textBox.Text = OutletP.ToString();
                 this.Log_TextBox.Text += log_content;
                 plot(pipe_profiles);
             }
@@ -259,9 +261,9 @@ namespace PipePressureDrop
                 this.InletP_textBox.Text = pin_field.ToString();
 
                 this.labelOutletPa.Text = "Psi";
-                this.OutletP_textBox.Text = pout.ToString();
-                double pin_field = Double.Parse(this.InletP_textBox.Text) / ConversionFactor.PSI_TO_PA;
-                this.InletP_textBox.Text = pin_field.ToString();
+                double pout_push = m_isFiledUnit ? pout / ConversionFactor.PSI_TO_PA : pout;
+                this.OutletP_textBox.Text = pout_push.ToString();
+
 
                 int nComp = PipeDataGrid.Rows.Count - 1;
                 this.ColumnDimeter.HeaderText = "D (ft)";
@@ -309,7 +311,9 @@ namespace PipePressureDrop
                 double pin_field = Double.Parse(this.InletP_textBox.Text) * ConversionFactor.PSI_TO_PA;
                 this.InletP_textBox.Text = pin_field.ToString();
 
-                this.labelOutletPa.Text = "Psi";
+                this.labelOutletPa.Text = "Pa";
+                double pout_push = m_isFiledUnit ? pout * ConversionFactor.PSI_TO_PA : pout;
+                this.OutletP_textBox.Text = pout_push.ToString();
 
                 this.ColumnDimeter.HeaderText = "D (m)";
                 this.ColumnLength.HeaderText = "L (m)";
