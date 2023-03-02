@@ -45,9 +45,9 @@ namespace PipePressureDropTest
             double qo = 0.0000001;
             double qw = 0.01;
             double qg = 0.00000001;
-            double reynolds = 0.0;
+            double hp = 0.0;
 
-            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw, ref reynolds);
+            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw, out hp);
             Assert.AreEqual(pout, pin, 0.0001 * pin);
         }
 
@@ -64,8 +64,8 @@ namespace PipePressureDropTest
             double qo = 0.0000001;
             double qw = 0.01;
             double qg = 0.00000001;
-            double reynolds = 0.0;
-            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw, ref reynolds);
+            double hp = 0.0;
+            double pout = pd.CalculatePressureLoss(pin, area, d, angle, length, qo, qg, qw, out hp);
 
             double dp_hyd_est = 1000.0 * 9.81 * 1.0;
             double pout_est = pin - dp_hyd_est;

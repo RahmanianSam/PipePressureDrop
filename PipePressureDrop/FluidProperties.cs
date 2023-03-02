@@ -17,7 +17,7 @@ namespace PipePressureDrop
             m_miu_w_stc = miu_w_stc * (1 / ConversionFactor.CP_TO_KG_MSec);
             m_miu_g_stc = miu_g_stc * (1 / ConversionFactor.CP_TO_KG_MSec);
         }
-
+        
         public double CalculateRs(double p)               // solution gas-oil ratio, scf/stb
         {
             return 0.0461 * Math.Pow(p, 1.205);

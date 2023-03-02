@@ -162,7 +162,7 @@ namespace PipePressureDrop
 
             for (int i_seg = 0; i_seg < numSeg; i_seg++)
             {
-                pout_seg = m_pressureDropModel.CalculatePressureLoss(seg_pin, m_area, Diameter, InclinationAngle, len_seg, qo, qg, qw, ref hp);
+                pout_seg = m_pressureDropModel.CalculatePressureLoss(seg_pin, m_area, Diameter, InclinationAngle, len_seg, qo, qg, qw, out hp);
                 pressure_list.Add(pout_seg / 1000.0);
                 double x = dist_list.Last() + len_seg;
                 dist_list.Add(x);
