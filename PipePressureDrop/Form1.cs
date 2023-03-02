@@ -13,12 +13,15 @@ namespace PipePressureDrop
     public partial class Form1 : Form
     {
         bool m_isFiledUnit = false;
-        double pout ;
+        double pout;
+        Dictionary<string, List<double>> m_pipe_profile;
+        List<double> out_pressure_list = new List<double>();
+
         public Form1()
         {
             InitializeComponent();
             this.SI_radioButton.Checked = true;
-            
+
             PipeDataGrid.Rows.Add();
             PipeDataGrid.Rows[0].Cells[0].Value = 2.0;
             PipeDataGrid.Rows[0].Cells[1].Value = 500.0;
@@ -43,7 +46,7 @@ namespace PipePressureDrop
         private void button1_Click(object sender, EventArgs e)
         {
             try
-           {
+            {
                 PipeDataGrid.RowTemplate.Height = 30;
                 int nComp = PipeDataGrid.Rows.Count - 1;
                 double length = 152.4;
@@ -110,12 +113,42 @@ namespace PipePressureDrop
                     pipeSys.Add(pipe);
 
                 }
+                //if siUnit
+                //pressure_list_in_field = m_profile_dic["Pressure"];
+                //pressure_list_in_si = List<double>();
+                //foreach p in pressure_list_in_field{
+                //    p_si = p * ConversionFactor.;kjkjlk
+                //    pressure_list_in_si.Add(p_si);
+                //}
+                //profile_dic["Pressure"] = pressure_list_in_si;
+                //plot(m_profile_dic)
 
                 pout = pipeSys.CalculatePipeSystem_POut(pin, qo, qg, qw, ref pipe_profiles, ref log_content);
+                m_pipe_profile = pipe_profiles;
+                var m_pipePressure_list = m_pipe_profile["Pressure"];
+                
+                foreach (double p in m_pipePressure_list)
+                {
+                    var m_PressureOutlet = m_isFiledUnit ? p / ConversionFactor.PSI_TO_PA : p ;
+                    out_pressure_list.Add(m_PressureOutlet);
+                }
+                m_pipe_profile["Pressure"] = out_pressure_list;
+
+
+                var m_pipeDistance = m_pipe_profile["Distance"];
+                var out_distance_list = new List<double>();
+                foreach (double d in m_pipeDistance)
+                {
+                    var m_distanceOutlet = m_isFiledUnit ? d / ConversionFactor.FT_TO_M : d;
+                    out_distance_list.Add(m_distanceOutlet);
+                }
+                m_pipe_profile["Distance"] = out_distance_list;
+
+                var m_pipeLiquidHoldup = m_pipe_profile["Liquid Holdup"];
                 double OutletP = m_isFiledUnit ? pout / ConversionFactor.PSI_TO_PA : pout;
                 this.OutletP_textBox.Text = OutletP.ToString();
                 this.Log_TextBox.Text += log_content;
-                plot(pipe_profiles);
+                plot(m_pipe_profile);
             }
 
             catch (Exception except)
@@ -125,7 +158,7 @@ namespace PipePressureDrop
 
         }
 
-        
+
         private void plot(Dictionary<string, List<double>> profile_dict)
 
         {
@@ -135,7 +168,7 @@ namespace PipePressureDrop
             // remove previous series on the chart
             for (int iSeri = 0, nSeri = this.pressure_chart.Series.Count; iSeri < nSeri; iSeri++)
                 this.pressure_chart.Series.RemoveAt(0);
-                this.reynolds_chart.Series.RemoveAt(0);
+            this.reynolds_chart.Series.RemoveAt(0);
 
             // set up the min and max of the axes
             double Xmin = x_list.Min();
@@ -209,8 +242,15 @@ namespace PipePressureDrop
             }
 
         }
-
-
+        //if siUnit
+        //pressure_list_in_field = m_profile_dic["Pressure"];
+        //pressure_list_in_si = List<double>();
+        //foreach p in pressure_list_in_field{
+        //    p_si = p * ConversionFactor.;kjkjlk
+        //    pressure_list_in_si.Add(p_si);
+        //}
+        //profile_dic["Pressure"] = pressure_list_in_si;
+        //plot(m_profile_dic)
 
 
         private void PipeDataGrid_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -264,10 +304,10 @@ namespace PipePressureDrop
                 double pout_push = m_isFiledUnit ? pout / ConversionFactor.PSI_TO_PA : pout;
                 this.OutletP_textBox.Text = pout_push.ToString();
 
-
                 int nComp = PipeDataGrid.Rows.Count - 1;
                 this.ColumnDimeter.HeaderText = "D (ft)";
                 this.ColumnLength.HeaderText = "L (ft)";
+
                 for (int iComp = 0; iComp < nComp; iComp++)
                 {
                     double length_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[1].Value.ToString());
@@ -275,9 +315,44 @@ namespace PipePressureDrop
                     this.PipeDataGrid.Rows[iComp].Cells[1].Value = length.ToString();
 
                     double diameter_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
-                    double diameter =diameter_input / ConversionFactor.FT_TO_M;
+                    double diameter = diameter_input / ConversionFactor.FT_TO_M;
                     this.PipeDataGrid.Rows[iComp].Cells[0].Value = diameter.ToString();
                 }
+
+                if (m_pipe_profile == null)
+                {
+                    return;
+                }
+                else 
+                {
+                    var m_pipePressure_list = m_pipe_profile["Pressure"];
+                    var m_distance_list = m_pipe_profile["Distance"];
+                    var m_pipePressureOut = new List<double>();
+                    var m_pipeDistanceOut = new List<double>();
+                    foreach (double p in m_pipePressure_list)
+                    {
+                        var m_pressureOutlet = p / ConversionFactor.PSI_TO_PA;
+                        m_pipePressureOut.Add(m_pressureOutlet);
+                    }
+                    m_pipe_profile["Pressure"] = m_pipePressureOut;
+
+                    foreach (double d in m_distance_list)
+                    {
+                        var m_distanceOutlet = d / ConversionFactor.FT_TO_M;
+                        m_pipeDistanceOut.Add(m_distanceOutlet);
+                    }
+                    m_pipe_profile["Pressure"] = m_pipePressureOut;
+                    m_pipe_profile["Distance"] = m_pipeDistanceOut;
+
+                    plot(m_pipe_profile);
+                }
+
+
+                pressure_chart.ChartAreas[0].AxisY.Title = "Pressure (psi)";
+                pressure_chart.ChartAreas[0].AxisX.Title = "X (ft)";
+                reynolds_chart.ChartAreas[0].AxisX.Title = "X (ft)";
+                this.OutletP_textBox.Text = pout_push.ToString();
+               
             }
             else
             {
@@ -311,6 +386,11 @@ namespace PipePressureDrop
                 double pin_field = Double.Parse(this.InletP_textBox.Text) * ConversionFactor.PSI_TO_PA;
                 this.InletP_textBox.Text = pin_field.ToString();
 
+                pressure_chart.ChartAreas[0].AxisY.Title = "Pressure (Kpa)";
+                pressure_chart.ChartAreas[0].AxisX.Title = "X (m)";
+                reynolds_chart.ChartAreas[0].AxisX.Title = "X (m)";
+               
+
                 this.labelOutletPa.Text = "Pa";
                 double pout_push = m_isFiledUnit ? pout * ConversionFactor.PSI_TO_PA : pout;
                 this.OutletP_textBox.Text = pout_push.ToString();
@@ -325,9 +405,40 @@ namespace PipePressureDrop
                     this.PipeDataGrid.Rows[iComp].Cells[1].Value = length.ToString();
 
                     double diameter_input = Double.Parse(this.PipeDataGrid.Rows[iComp].Cells[0].Value.ToString());
-                    double diameter =diameter_input * ConversionFactor.FT_TO_M;
+                    double diameter = diameter_input * ConversionFactor.FT_TO_M;
                     this.PipeDataGrid.Rows[iComp].Cells[0].Value = diameter.ToString();
+                } 
+
+                    if (m_pipe_profile == null)
+                {
+                    return;
                 }
+
+                else 
+                {
+                    var m_pipePressure_list = m_pipe_profile["Pressure"];
+                    var m_distance_list = m_pipe_profile["Distance"];
+                    var m_pipePressureOut = new List<double>();
+                    var m_pipeDistanceOut = new List<double>();
+                    foreach (double p in m_pipePressure_list)
+                    {
+                        var m_pressureOutlet = p * ConversionFactor.PSI_TO_PA;
+                        m_pipePressureOut.Add(m_pressureOutlet);
+                    }
+                    m_pipe_profile["Pressure"] = m_pipePressureOut;
+
+                    foreach (double d in m_distance_list)
+                    {
+                        var m_distanceOutlet = d * ConversionFactor.FT_TO_M;
+                        m_pipeDistanceOut.Add(m_distanceOutlet);
+                    }
+                    m_pipe_profile["Pressure"] = m_pipePressureOut;
+                    m_pipe_profile["Distance"] = m_pipeDistanceOut;
+                    plot(m_pipe_profile);
+                }
+
+
+                
             }
 
         }
