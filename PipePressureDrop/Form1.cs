@@ -15,7 +15,7 @@ namespace PipePressureDrop
         bool m_isFiledUnit = false;
         double pout;
         Dictionary<string, List<double>> m_pipe_profile;
-        List<double> out_pressure_list = new List<double>();
+        List<double> out_pressure_list; 
 
         public Form1()
         {
@@ -47,6 +47,7 @@ namespace PipePressureDrop
         {
             try
             {
+                List<double> out_pressure_list = new List<double>();
                 PipeDataGrid.RowTemplate.Height = 30;
                 int nComp = PipeDataGrid.Rows.Count - 1;
                 double length = 152.4;
@@ -242,16 +243,6 @@ namespace PipePressureDrop
             }
 
         }
-        //if siUnit
-        //pressure_list_in_field = m_profile_dic["Pressure"];
-        //pressure_list_in_si = List<double>();
-        //foreach p in pressure_list_in_field{
-        //    p_si = p * ConversionFactor.;kjkjlk
-        //    pressure_list_in_si.Add(p_si);
-        //}
-        //profile_dic["Pressure"] = pressure_list_in_si;
-        //plot(m_profile_dic)
-
 
         private void PipeDataGrid_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
